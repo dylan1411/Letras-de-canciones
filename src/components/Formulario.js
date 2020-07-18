@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Formulario = () => {
+const Formulario = ({setSearch}) => {
     //state
     const [busqueda, guardarBusqueda] = useState({
         artista: '',
@@ -24,6 +24,8 @@ const Formulario = () => {
             return
         }
         guardarError(false);
+        //pasar al principal
+        setSearch(busqueda);
     }
     return (
         <div className="bg-info">
