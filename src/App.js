@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from 'react';
 import Formulario from './components/Formulario';
 import Cancion from './components/Cancion';
 import Artista from './components/Artista';
-import axios from 'axios';
 
 function App() {
   //state
@@ -15,17 +14,20 @@ function App() {
     const {artista, cancion} = search;
     const consultarAPIletra = async () => {
       const url=`https://api.lyrics.ovh/v1/${artista}/${cancion}`;
-      const url2=`https://www.theaudiodb.com/api/v1/json/1/search.php?s=${artista}`;
-      
-      const [letra, informacion] = await Promise.all([
-        axios(url),
-        axios(url2)
-      ])
+      const resultado = await fetch(url)     
+      const letra = await resultado.json();
 
       guardarLetra(letra.lyrics);
-      guardarInfo(informacion.data.artists[0]);
     }
-    consultarAPIletra()
+    const consultarAPIartista = async () => {
+      const url=`https://www.theaudiodb.com/api/v1/json/1/search.php?s=${artista}`;
+      const resultado = await fetch(url);
+      const informacion = await resultado.json();
+
+      guardarInfo(informacion.artists[0]);
+    }
+    consultarAPIartista();
+    consultarAPIletra();
   }, [search, info])
   return (
     <Fragment>
